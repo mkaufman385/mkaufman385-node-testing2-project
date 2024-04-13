@@ -6,6 +6,11 @@ const server = require("../server");
 const joke1 = { joke: "Dumby Joke 1", punchline: "Dumby punchline 1" };
 const joke2 = { joke: "Dumby Joke 2", punchline: "Dumby punchline 2" };
 
+beforeAll(async () => {
+  await db.migrate.rollback();
+  await db.migrate.latest();
+});
+
 it("correct env var", () => {
   expect(process.env.DB_ENV).toBe("testing");
 });
