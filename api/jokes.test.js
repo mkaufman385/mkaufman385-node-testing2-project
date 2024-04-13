@@ -37,5 +37,9 @@ describe("jokes model functions", () => {
       jokes = await db("jokes");
       expect(jokes).toHaveLength(2);
     });
+    it("inserted joke and punchline", async () => {
+      const joke = await Joke.createJoke(joke1);
+      expect(joke).toMatchObject({ joke_id: 1, ...joke });
+    });
   });
 });
