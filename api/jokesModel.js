@@ -6,6 +6,7 @@ async function createJoke(joke) {
 }
 
 async function deleteJoke(id) {
+  console.log(id);
   return db("jokes").where("joke_id", id).del();
 }
 

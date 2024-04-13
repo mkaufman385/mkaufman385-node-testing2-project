@@ -3,22 +3,47 @@ const db = require("../data/seeds/dbConfig");
 const server = require("../server");
 const Joke = require("./jokesModel");
 
-//DUMBY DATABASE JOKES
-const joke1 = { joke: "Dumby Joke 1", punchline: "Dumby punchline 1" };
-const joke2 = { joke: "Dumby Joke 2", punchline: "Dumby punchline 2" };
-
 beforeAll(async () => {
+  // Clear migration lock
+  await db("knex_migrations_lock").update({ is_locked: 0 });
   await db.migrate.rollback();
   await db.migrate.latest();
 });
 
-beforeEach(async () => {
-  await db("jokes").truncate();
-});
+// const knexCleaner = require("knex-cleaner");
 
-afterAll(async () => {
-  await db.destroy();
-});
+// beforeAll(async () => {
+//   await db.migrate.rollback();
+//   await db.migrate.latest();
+// });
+
+// beforeEach(async () => {
+//   await knexCleaner.clean(db, {
+//     mode: "delete", // 'delete' can be used if truncating isn't supported
+//     ignoreTables: ["knex_migrations", "knex_migrations_lock"],
+//   });
+// });
+
+// afterAll(async () => {
+//   await db.destroy();
+// });
+
+//DUMBY DATABASE JOKES
+const joke1 = { joke: "Dumby Joke 1", punchline: "Dumby punchline 1" };
+const joke2 = { joke: "Dumby Joke 2", punchline: "Dumby punchline 2" };
+
+// beforeAll(async () => {
+//   await db.migrate.rollback();
+//   await db.migrate.latest();
+// });
+
+// beforeEach(async () => {
+//   await db("jokes").truncate();
+// });
+
+// afterAll(async () => {
+//   await db.destroy();
+// });
 
 it("correct env var", () => {
   expect(process.env.DB_ENV).toBe("testing");
@@ -45,6 +70,7 @@ describe("jokes model functions", () => {
     it("removes joke from db", async () => {
       const [joke_id] = await db("jokes").insert(joke1);
       let joke = await db("jokes").where({ joke_id }).first();
+      // console.log("JOKE-->", joke, joke_id);
       // Verify that the joke exists in the database before deletion
       expect(joke).toBeTruthy();
       // Send DELETE request to delete the joke
