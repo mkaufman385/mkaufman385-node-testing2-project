@@ -70,7 +70,6 @@ describe("jokes model functions", () => {
     it("removes joke from db", async () => {
       const [joke_id] = await db("jokes").insert(joke1);
       let joke = await db("jokes").where({ joke_id }).first();
-      // console.log("JOKE-->", joke, joke_id);
       // Verify that the joke exists in the database before deletion
       expect(joke).toBeTruthy();
       // Send DELETE request to delete the joke
@@ -78,6 +77,11 @@ describe("jokes model functions", () => {
       // Check if the joke no longer exists in the database
       joke = await db("jokes").where({ joke_id }).first();
       expect(joke).toBeFalsy();
+    });
+    it("responds with the deleted joke", async () => {
+      await db("jokes").insert(joke1);
+      let joke = await request(server).delete("/jokes/1");
+      expect(joke.body).toMatchObject(joke1);
     });
   });
 });
