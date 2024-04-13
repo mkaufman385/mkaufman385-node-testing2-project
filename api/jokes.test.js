@@ -11,6 +11,10 @@ beforeAll(async () => {
   await db.migrate.latest();
 });
 
+beforeEach(async () => {
+  await db("jokes").truncate();
+});
+
 it("correct env var", () => {
   expect(process.env.DB_ENV).toBe("testing");
 });
